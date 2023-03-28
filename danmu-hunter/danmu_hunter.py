@@ -95,7 +95,6 @@ def parseData(_data):
         try:
             jd = json.loads(_data[16:].decode('utf-8', errors='ignore'))
             if (jd['cmd'] == 'DANMU_MSG'):
-                # print('[DANMU] ', jd['info'][2][1], ': ', jd['info'][1])
                 msg = jd['info'][1]
                 user = jd['info'][2][1]
                 print("[DANMU_MSG]:   User: {}  Msg: {}".format(user, msg))
@@ -103,6 +102,7 @@ def parseData(_data):
                     status_counter[msg] += 1
                     print("\033[0;36m[Counter]:   {} + 1\033[0m".format(msg))
                     print("\033[0;36m[Counter]\033[0m:   {}".format(status_counter))
+
         except Exception as e:
             pass
 

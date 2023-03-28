@@ -1,13 +1,16 @@
 import cv2
 import numpy as np
-
-from ultralytics.yolo.utils import yaml_load
-from ultralytics.yolo.utils.checks import check_yaml
+import sys
+import yaml
 
 class Model:
-    def __init__(self, _model_path, _size=(640,640)):
+    def __init__(self, _model_path, _size=(640,640), _is_cuda=True):
         self.model = cv2.dnn.readNetFromONNX(_model_path)
-        self.CLASSES = yaml_load(check_yaml('./datasets/coco128.yaml'))['names']
+        if _is_cuda:
+            self.model.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+            self.model.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA);
+
+        self.CLASSES = yaml.load(open(sys.path[0] + '/datasets/coco128.yaml', 'r', encoding='utf-8').read(), Loader=yaml.FullLoader)['names']
         self.size = _size
         self.colors = np.random.uniform(0, 255, size=(len(self.CLASSES), 3))
 
