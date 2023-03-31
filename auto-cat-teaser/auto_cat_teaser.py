@@ -39,7 +39,7 @@ async def yoloDetect(_cap, _net):
         row, col, _ = src_img.shape
         roi_img = src_img[20:row - 20, 0:col]
         cv2.imshow('src', roi_img)
-        if cv2.waitKey(1) == 27:
+        if cv2.waitKey(1) & 0xFF== 27:
             break
 
 def serialWrite(_ser):
