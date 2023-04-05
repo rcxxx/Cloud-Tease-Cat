@@ -1,6 +1,9 @@
 # serial port
 serial_port: '/dev/ttyUSB0'
+serial_interval: 10
 
 # video stream
 #cap: 'rtmp://0.0.0.0:1935/live/stream.flv'
 cap: 0
+img_scale: 0.5
+record: 0

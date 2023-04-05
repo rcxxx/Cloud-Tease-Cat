@@ -14,9 +14,11 @@ class Model:
         self.size = _size
         self.colors = np.random.uniform(0, 255, size=(len(self.CLASSES), 3))
 
-    def draw_bounding_box(self, _img, class_id, confidence, x, y, x_plus_w, y_plus_h):
+    def draw_bounding_box(self, _img, class_id, confidence, x, y, x_plus_w, y_plus_h, _color=None):
         label = f'{self.CLASSES[class_id]} ({confidence:.2f})'
-        color = self.colors[class_id]
+        color = _color
+        if color == None:
+            color = self.colors[class_id]
         cv2.rectangle(_img, (x, y), (x_plus_w, y_plus_h), color, 2)
         cv2.putText(_img, label, (x - 10, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 

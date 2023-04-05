@@ -1,0 +1,12 @@
+# DeviceSecret
+productKey: ""
+deviceName: ""
+deviceSecret: ""
+
+# MQTT Connection Parameters
+clientId: ""
+username: ""
+mqttHostUrl: ""
+port: 1883
+passwd: ""
+

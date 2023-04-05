@@ -1,6 +1,7 @@
 # Usage: pip install -r requirements.txt
 
 aiowebsocket>=1.0.0
+paho-mqtt==1.6.1
 numpy>=1.18.5
 opencv-python>=4.6.0
 opencv-contrib-python>=4.6.0
