@@ -15,7 +15,7 @@ class Model:
         self.colors = np.random.uniform(0, 255, size=(len(self.CLASSES), 3))
         # warm-up
         warmup_img = np.zeros((self.size[0], self.size[1], 3), dtype=np.uint8)
-        self.det(warmup_data)
+        self.det(warmup_img)
 
     def draw_bounding_box(self, _img, class_id, confidence, x, y, x_plus_w, y_plus_h, _color=None):
         label = f'{self.CLASSES[class_id]} ({confidence:.2f})'
