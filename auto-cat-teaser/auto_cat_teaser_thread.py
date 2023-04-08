@@ -10,7 +10,7 @@ from yolov8_onnx import Model
 td_lock = threading.Lock()
 td_exit = False
 
-g_ctrl = { 'tease': 0, 'find': 0, 'free':0}
+g_ctrl = {'tease': 0, 'find': 0, 'free': 0}
 
 class videoStream(threading.Thread):
     def __init__(self, _cap=0, _record=0):
@@ -23,7 +23,7 @@ class videoStream(threading.Thread):
             import datetime
             now_t = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
             self.writer = cv2.VideoWriter(sys.path[0] + '/videos/' + now_t + '-record.mp4',
-                                          cv2.VideoWriter_fourcc('M','P','4','V'), 24, (width, height))
+                                          cv2.VideoWriter_fourcc('M', 'P', '4', 'V'), 24, (width, height))
     def run(self):
         global td_exit
         while not td_exit:
@@ -80,11 +80,18 @@ class serialCTRL(threading.Thread):
 
 def main():
     cfg = yaml.load(open(sys.path[0] + '/cfg.yaml', 'r', encoding='utf-8').read(), Loader=yaml.FullLoader)
-    net = Model(sys.path[0] + '/models/yolov8s-480x.onnx', _size=(480, 480))
+    
     video_td = videoStream(_cap=cfg['cap'], _record=cfg['record'])
     video_td.start()
     serial_td = serialCTRL(_port=cfg['serial_port'], _interval=cfg['serial_interval'])
     serial_td.start()
+
+    # yolo model
+    net = Model(
+        _classes_path=sys.path[0] + cfg['classes_path'],
+        _model_path=sys.path[0] + cfg['model_path'],
+        _size=(cfg['imgsz'], cfg['imgsz']),
+        _is_cuda=cfg['is_cuda'])
 
     global td_exit
     while not td_exit:
@@ -98,10 +105,12 @@ def main():
         for i in range(len(detections)):
             detection = detections[i]
             id = detection['class_id']
-            if (id == 15 or id == 16):
+            name = net.CLASSES[id]
+            if (name == 'cat' or name == 'dog'):
                 have_cat = True
+                draw_id = id if (name == 'cat') else (id-1)
                 net.draw_bounding_box(src_img,
-                                    15,  # only cat
+                                    draw_id,  # only cat
                                     detection['confidence'],
                                     round(detection['box'][0] * detection['scale']),
                                     round(detection['box'][1] * detection['scale']),

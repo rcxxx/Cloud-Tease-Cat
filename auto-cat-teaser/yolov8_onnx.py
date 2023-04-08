@@ -4,15 +4,18 @@ import sys
 import yaml
 
 class Model:
-    def __init__(self, _model_path, _size=(640,640), _is_cuda=True):
+    def __init__(self, _classes_path, _model_path, _size=(640,640), _is_cuda=True):
         self.model = cv2.dnn.readNetFromONNX(_model_path)
         if _is_cuda:
             self.model.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
             self.model.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA);
 
-        self.CLASSES = yaml.load(open(sys.path[0] + '/datasets/coco128.yaml', 'r', encoding='utf-8').read(), Loader=yaml.FullLoader)['names']
+        self.CLASSES = yaml.load(open(_classes_path, 'r', encoding='utf-8').read(), Loader=yaml.FullLoader)['names']
         self.size = _size
         self.colors = np.random.uniform(0, 255, size=(len(self.CLASSES), 3))
+        # warm-up
+        warmup_img = np.zeros((self.size[0], self.size[1], 3), dtype=np.uint8)
+        self.det(warmup_data)
 
     def draw_bounding_box(self, _img, class_id, confidence, x, y, x_plus_w, y_plus_h, _color=None):
         label = f'{self.CLASSES[class_id]} ({confidence:.2f})'
