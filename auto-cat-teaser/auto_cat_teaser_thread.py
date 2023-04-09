@@ -101,7 +101,9 @@ def main():
 
         have_cat = False
         # have_person = False
-        detections = net.det(src_img)
+        # | OpenCV Predict | np.ndarray | HWC, BGR to RGB |
+        rgb_img = src_img[:, :, ::-1]
+        detections = net.det(rgb_img)
         for i in range(len(detections)):
             detection = detections[i]
             id = detection['class_id']

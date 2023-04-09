@@ -2,15 +2,17 @@
 serial_port: '/dev/ttyUSB0'
 serial_interval: 10
 
-# video stream
-#cap: 'rtmp://0.0.0.0:1935/live/stream'
+# Insta360 OneRS rtmp url
 #cap: 'rtmp://192.168.42.5:1935/live/stream'
+# video stream
+#cap: 'videos/*.mp4'
+# Use camera
 cap: 0
-img_scale: 0.5
+img_scale: 0.6
 record: 0
 
-# yolo
+# yolo configure
 classes_path: '/datasets/coco128.yaml'
-model_path: '/models/yolov8s-640x.onnx'
+model_path: '/models/yolov8s-plus-640x.onnx'
 imgsz: 640
 is_cuda: 1
