@@ -12,7 +12,7 @@ img_scale: 0.6
 record: 0
 
 # yolo configure
-classes_path: '/datasets/coco128.yaml'
-model_path: '/models/'
+classes_path: '/datasets/one-rs.yaml'
+model_path: '/models/one-rs.onnx'
 imgsz: 640
 is_cuda: 1
