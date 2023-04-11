@@ -13,7 +13,7 @@ name | version
 ## 玩具改造
 
 ## 物联网小程序
-- [远程逗猫微信小程序](./IoT-mqtt-miniprogram/README.md)
+- [远程逗猫微信小程序](./IoT-mqtt-miniprogram/)
 - [阿里云物联网平台与小程序 MQTT 连接](./IoT-mqtt-client/)
 
 ## 目标检测模型
