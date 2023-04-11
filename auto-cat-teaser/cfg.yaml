@@ -13,6 +13,6 @@ record: 0
 
 # yolo configure
 classes_path: '/datasets/one-rs.yaml'
-model_path: '/models/one-rs.onnx'
+model_path: '/models/one-rs-640x.onnx'
 imgsz: 640
 is_cuda: 1

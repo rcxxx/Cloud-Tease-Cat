@@ -1,0 +1,186 @@
+/**index.wxss**/
+/* @import "../lib/weui.wxss"; */
+page{
+  background-color: rgb(228, 228, 228);
+}
+
+.page-section-gap{
+  box-sizing: border-box; 
+   padding: 0 30rpx;
+
+}
+live-player {
+  width: 100%;
+  height: 450rpx;
+}
+
+video {
+  width: 100%;
+  height: 425rpx;
+}
+
+.button1{
+  position: absolute;
+  /* position: relative; */
+  border: 1px solid gray;
+  border-radius: 100%;
+  display: flex;
+
+  justify-content: center;
+
+  background-color: rgb(236, 236, 236);
+  height: 60vw;
+  width: 60vw;
+  margin:100rpx 150rpx;
+  bottom: 350rpx;
+  color: slategray;
+}
+
+.butT{
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 100%;
+  width: 2vw;
+  height: 2vw;
+  top: 10rpx; 
+  position: relative;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgb(170, 170, 170);
+}
+
+.butL{
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 100%;
+  width: 2vw;
+  height: 2vw;
+  top: 200rpx; 
+  left: 10rpx;
+
+  position: absolute;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgb(170, 170, 170);
+}
+
+
+.butB{
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 100%;
+  width: 2vw;
+  height: 2vw;
+  bottom: 10rpx; 
+  /* left: 0rpx; */
+
+  position: absolute;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgb(170, 170, 170);
+}
+
+.butR{
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 100%;
+  width: 2vw;
+  height: 2vw;
+  top: 200rpx; 
+  right: 10rpx;
+
+  position: absolute;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgb(170, 170, 170);
+}
+
+
+.button2{
+  position: absolute;
+  /* position: relative; */
+  display: flex;
+  /* justify-content: center;
+  flex-direction: inherit; */
+  /* background-color: white; */
+  height: 30vw;
+  width: 100%;
+  bottom: 60rpx;
+  color: slategray;
+}
+
+
+.stick{
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 10%;
+  /* width: 30vw;
+  height: 30vw; */
+  flex-grow: 1;
+  /* margin:0rpx 0rpx 0rpx; */
+  position: relative;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgb(170, 170, 170);
+}
+
+.ball{
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 10%;
+  /* width: 30vw;
+  height: 30vw; */
+
+  flex-grow: 1;
+  /* margin:0rpx 50rpx; */
+  position: relative;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgb(170, 170, 170);
+}
+
+.laser{
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 10%;
+  /* width: 30vw;
+  height: 30vw;
+  */
+  flex-grow: 1;
+  /* margin:0rpx 50rpx; */
+  position: relative;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  box-shadow: 0 0 30px rgb(170, 170, 170);
+}
+
+.button_hover{
+  border: 2px solid rgb(0, 183, 255);
+}
+
+
+.button_img{
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+.status{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  flex-direction: inherit;
+  border-top: 1px solid gainsboro;
+  background-color: white;
+  width: 100%;
+  text-align: center;
+  bottom: 0;
+  color: slategray;
+}

@@ -25,7 +25,7 @@ class Model:
         cv2.rectangle(_img, (x, y), (x_plus_w, y_plus_h), color, 2)
         cv2.putText(_img, label, (x - 10, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
-    def det(self, _img ,_score_th=0.25, _NMS_th = 0.45):
+    def det(self, _img , _score_th=0.25, _NMS_th = 0.45):
         [height, width, _] = _img.shape
         length = max(height, width)
         img = np.zeros((length, length, 3), np.uint8)

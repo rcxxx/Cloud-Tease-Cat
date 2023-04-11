@@ -103,7 +103,7 @@ def main():
         # have_person = False
         # | OpenCV Predict | np.ndarray | HWC, BGR to RGB |
         rgb_img = src_img[:, :, ::-1]
-        detections = net.det(rgb_img)
+        detections = net.det(rgb_img, _score_th=0.45, _NMS_th = 0.45)
         for i in range(len(detections)):
             detection = detections[i]
             id = detection['class_id']
@@ -135,7 +135,7 @@ def main():
             g_ctrl['find'] = 0
             g_ctrl['tease'] = 1
         else:
-            g_ctrl['find']= 1
+            g_ctrl['find'] = 1
             g_ctrl['tease'] = 0
 
         cv2.imshow('src', src_img)

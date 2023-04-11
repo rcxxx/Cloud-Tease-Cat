@@ -1,0 +1,47 @@
+<!--index.wxml-->
+
+
+
+<live-player id="player" src="rtmp://192.168.3.11/live/stream.flv" mode="live" autoplay="ture" bindstatechange="statechange" binderror="error" />
+
+
+
+<view class='button1'>
+  <view class='butL' bindtap='command_opendoor' hover-class='button_hover' hover-stay-time='500'>
+  </view>
+
+  <view class='butR' bindtap='command_opendoor' hover-class='button_hover' hover-stay-time='500'>
+  </view> 
+
+  <view class='butB' bindtap='command_opendoor' hover-class='button_hover' hover-stay-time='500'>
+  </view>
+
+  <view class='butT' bindtap='command_opendoor' hover-class='button_hover' hover-stay-time='500'>
+  </view>
+</view>
+
+<view class='button2'>
+  <view class='stick' bindtap='command_stick'  data-value='{params:{ball:0}}' hover-class='button_hover' hover-stay-time='200'>
+    <image src='{{ img_url }}' mode='scaleToFill' class='button_img'></image>
+    <!-- <text style='padding-top: 3vh; '>逗猫棒</text> -->
+  </view>
+
+  <view class='ball' bindtap='command_stick'  data-value='{params:{ball:1}}' hover-class='button_hover' hover-stay-time='200'>
+    <image src='{{ img_url2 }}' mode='scaleToFill' class='button_img'></image>
+    <!-- <text style='padding-top: 3vh; '>逗猫棒</text> -->
+  </view>
+
+  <view class='laser' bindtap='command_stick'  data-value='{params:{ball:0}}' hover-class='button_hover' hover-stay-time='200'>
+    <image src='{{ img_url3 }}' mode='scaleToFill' class='button_img'></image>
+    <!-- <text style='padding-top: 3vh; '>小球</text> -->
+  </view>
+</view>
+
+
+<view class='status'>
+  <!-- <view style='width:5vw;height:5vw;margin:auto 2vw;background-color:{{iot_connect?"green":"red"}}'></view> -->
+  <view>{{ connect_text }}</view>
+</view>
+
+
+
