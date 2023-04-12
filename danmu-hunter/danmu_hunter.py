@@ -2,22 +2,27 @@
 import asyncio
 import zlib
 import json
+import sys
+import yaml
 
 from aiowebsocket.converses import AioWebSocket
 
 import serial
 
-ser = serial.Serial(port='/dev/ttyUSB0',
+cfg = yaml.load(open(sys.path[0] + '/dm_cfg.yaml', 'r', encoding='utf-8').read(), Loader=yaml.FullLoader)
+
+ser = serial.Serial(port=cfg['serial_port'],
                     baudrate=115200,
                     timeout=0.5)
 
-KEYS = {'小球':[0xA5, 0xA5, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
-        '激光笔':[0xA5, 0xA5, 0x05, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
-        '逗猫棒':[0xA5, 0xA5, 0x09, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00]}
+KEYS = {'ball': [0xA5, 0xA5, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
+        'laser': [0xA5, 0xA5, 0x05, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
+        'stick': [0xA5, 0xA5, 0x09, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00]}
 
-status_counter = {'小球':0,
-                  '激光笔':0,
-                  '逗猫棒':0}
+status_counter = {'ball': 0,
+                  'laser': 0,
+                  'stick': 0}
+
 
 def statusWrite():
     global status_counter
@@ -29,22 +34,28 @@ def statusWrite():
     else:
         print("\033[0;;41m[Publisher]\033[0m:   No items are selected.  \033[0;36m[Counter]\033[0m: Clear")
 
-    status_counter = {'小球':0, '激光笔':0, '逗猫棒':0}
+    status_counter = {'ball': 0, 'laser': 0, 'stick': 0}
 
-SER_WRITE_INTERVAL = 10
+
+SER_WRITE_INTERVAL = cfg['serial_interval']
+
+
 async def intervalSend():
     global status_counter
     while True:
         await asyncio.sleep(SER_WRITE_INTERVAL)
         statusWrite()
 
+
 # DANMU Hunter
 remote = 'ws://broadcastlv.chat.bilibili.com:2244/sub'
-room_id = '23923844'
+room_id = cfg['room_id']
 
 data_raw = '000000{Header}0010000100000007000000017b22726f6f6d6964223a{ID}7d'
 data_raw = data_raw.format(Header=hex(27 + len(room_id))[2:],
                            ID=''.join(map(lambda x: hex(ord(x))[2:], list(room_id))))
+
+
 async def startUp():
     async with AioWebSocket(remote) as aws:
         converse = aws.manipulator
@@ -56,13 +67,17 @@ async def startUp():
                             task_receive_package,
                             task_serial_send})
 
+
 heart_beat_msg = '00 00 00 10 00 10 00 01  00 00 00 02 00 00 00 01'
 send_heart_beat_interval = 30
+
+
 async def sendHeartBeat(_webscoket):
     while True:
         await asyncio.sleep(send_heart_beat_interval)
         await _webscoket.send(bytes.fromhex(heart_beat_msg))
         # print('[Notice] Sent HeartBeat.')
+
 
 async def receivePackage(_webscoket):
     while True:
@@ -73,6 +88,7 @@ async def receivePackage(_webscoket):
 
         parseData(recv_text)
 
+
 # DANMU Hunter
 def parseData(_data):
     # 获取数据包的长度，版本和操作类型
@@ -80,21 +96,21 @@ def parseData(_data):
     ver = int(_data[6:8].hex(), 16)
     op = int(_data[8:12].hex(), 16)
 
-    if (len(_data) > packet_len):
+    if len(_data) > packet_len:
         parseData(_data[packet_len:])
         _data = _data[:packet_len]
-    if (ver == 2):
+    if ver == 2:
         _data = zlib.decompress(_data[16:])
         parseData(_data)
         return
-    if (ver == 1):
+    if ver == 1:
         return
 
-    if (op == 5):
+    if op == 5:
         global status_counter
         try:
             jd = json.loads(_data[16:].decode('utf-8', errors='ignore'))
-            if (jd['cmd'] == 'DANMU_MSG'):
+            if jd['cmd'] == 'DANMU_MSG':
                 msg = jd['info'][1]
                 user = jd['info'][2][1]
                 print("[DANMU_MSG]:   User: {}  Msg: {}".format(user, msg))
@@ -105,6 +121,7 @@ def parseData(_data):
 
         except Exception as e:
             pass
+
 
 if __name__ == '__main__':
     try:

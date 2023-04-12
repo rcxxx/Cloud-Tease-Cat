@@ -15,7 +15,7 @@ clientId = cfg['clientId']
 username = cfg['username']
 mqttHostUrl = cfg['mqttHostUrl']
 port = cfg['port']
-passwd= cfg['passwd']
+passwd = cfg['passwd']
 
 keepAlive = 300
 
@@ -25,9 +25,10 @@ ser = serial.Serial(port='/dev/ttyUSB0',
                     baudrate=115200,
                     timeout=0.5)
 
-KEYS = {'小球':[0xA5, 0xA5, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
-        '激光笔':[0xA5, 0xA5, 0x05, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
-        '逗猫棒':[0xA5, 0xA5, 0x0A, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00]}
+KEYS = {'小球': [0xA5, 0xA5, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
+        '激光笔': [0xA5, 0xA5, 0x05, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
+        '逗猫棒': [0xA5, 0xA5, 0x0A, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00]}
+
 
 def connect_mqtt() -> mqtt:
     def on_connect(client, userdata, flags, rc):
@@ -37,11 +38,13 @@ def connect_mqtt() -> mqtt:
 
         else:
             print("[Connect]: Connect failed...  error code is:" + str(rc))
+
     client = mqtt.Client(clientId)
     client.username_pw_set(username=username, password=passwd)
     client.on_connect = on_connect
     client.connect(mqttHostUrl, port, keepAlive)
     return client
+
 
 def subscribe(client: mqtt):
     def on_message(client, userdata, msg):
@@ -63,10 +66,10 @@ def subscribe(client: mqtt):
             ser.write(bytes(data))
             print("\033[0;36m[Publisher]:  Use item: laser\033[0m")
 
-
     print("[Subscribe]: Waiting for reception")
     client.subscribe(subTopic)
     client.on_message = on_message
+
 
 def run():
     client = connect_mqtt()
@@ -75,6 +78,7 @@ def run():
     subscribe(client)
     while True:
         time.sleep(1)
+
 
 if __name__ == '__main__':
     run()

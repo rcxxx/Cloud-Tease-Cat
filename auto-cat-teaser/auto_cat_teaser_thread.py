@@ -3,7 +3,8 @@ import cv2
 import yaml
 import sys
 import serial
-import threading, time
+import threading
+import time
 
 from yolov8_onnx import Model
 
@@ -11,6 +12,7 @@ td_lock = threading.Lock()
 td_exit = False
 
 g_ctrl = {'tease': 0, 'find': 0, 'free': 0}
+
 
 class videoStream(threading.Thread):
     def __init__(self, _cap=0, _record=0):
@@ -24,6 +26,7 @@ class videoStream(threading.Thread):
             now_t = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
             self.writer = cv2.VideoWriter(sys.path[0] + '/videos/' + now_t + '-record.mp4',
                                           cv2.VideoWriter_fourcc('M', 'P', '4', 'V'), 24, (width, height))
+
     def run(self):
         global td_exit
         while not td_exit:
@@ -36,7 +39,8 @@ class videoStream(threading.Thread):
         self.cap.release()
 
     def getFrame(self, _scale):
-        return cv2.resize(self.frame, None,fx=_scale, fy=_scale)
+        return cv2.resize(self.frame, None, fx=_scale, fy=_scale)
+
 
 class serialCTRL(threading.Thread):
     def __init__(self, _port, _interval):
@@ -78,9 +82,10 @@ class serialCTRL(threading.Thread):
             g_ctrl = {'tease': 0, 'find': 0, 'free': 0}
             td_lock.release()
 
+
 def main():
     cfg = yaml.load(open(sys.path[0] + '/cfg.yaml', 'r', encoding='utf-8').read(), Loader=yaml.FullLoader)
-    
+
     video_td = videoStream(_cap=cfg['cap'], _record=cfg['record'])
     video_td.start()
     serial_td = serialCTRL(_port=cfg['serial_port'], _interval=cfg['serial_interval'])
@@ -103,22 +108,22 @@ def main():
         # have_person = False
         # | OpenCV Predict | np.ndarray | HWC, BGR to RGB |
         rgb_img = src_img[:, :, ::-1]
-        detections = net.det(rgb_img, _score_th=0.45, _NMS_th = 0.45)
+        detections = net.det(rgb_img, _score_th=0.45, _NMS_th=0.45)
         for i in range(len(detections)):
             detection = detections[i]
             id = detection['class_id']
             name = net.CLASSES[id]
-            if (name == 'cat' or name == 'dog'):
+            if name == 'cat' or name == 'dog':
                 have_cat = True
-                draw_id = id if (name == 'cat') else (id-1)
+                draw_id = id if (name == 'cat') else (id - 1)
                 net.draw_bounding_box(src_img,
-                                    draw_id,  # only cat
-                                    detection['confidence'],
-                                    round(detection['box'][0] * detection['scale']),
-                                    round(detection['box'][1] * detection['scale']),
-                                    round((detection['box'][0] + detection['box'][2]) * detection['scale']),
-                                    round((detection['box'][1] + detection['box'][3]) * detection['scale']),
-                                    _color=(127, 255, 0))
+                                      draw_id,  # only cat
+                                      detection['confidence'],
+                                      round(detection['box'][0] * detection['scale']),
+                                      round(detection['box'][1] * detection['scale']),
+                                      round((detection['box'][0] + detection['box'][2]) * detection['scale']),
+                                      round((detection['box'][1] + detection['box'][3]) * detection['scale']),
+                                      _color=(127, 255, 0))
 
             # if id == 0:
             #     have_person = True
@@ -144,6 +149,7 @@ def main():
 
     video_td.join()
     serial_td.join()
+
 
 if __name__ == "__main__":
     main()

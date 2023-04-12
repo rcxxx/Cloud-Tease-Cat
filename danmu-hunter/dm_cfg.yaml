@@ -1,0 +1,6 @@
+# serial port
+serial_port: '/dev/ttyUSB0'
+serial_interval: 10
+
+# live room id
+room_id: 0
