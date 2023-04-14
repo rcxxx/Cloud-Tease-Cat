@@ -42,6 +42,11 @@ class videoStream(threading.Thread):
         return cv2.resize(self.frame, None, fx=_scale, fy=_scale)
 
 
+KEYS = {'ball': [0xA5, 0xA5, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
+        'laser': [0xA5, 0xA5, 0x05, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
+        'stick': [0xA5, 0xA5, 0x0A, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00]}
+KEYS_LIST = ['ball', 'laser', 'stick']
+
 class serialCTRL(threading.Thread):
     def __init__(self, _port, _interval):
         super(serialCTRL, self).__init__()
@@ -63,6 +68,7 @@ class serialCTRL(threading.Thread):
 
     def serialWrite(self, _ser):
         global g_ctrl
+        global KEYS
         td_lock.acquire()
         ctrl = g_ctrl
         print("\033[0;;42m[Publisher]\033[0m: CTRL Status:  ", ctrl)
@@ -76,7 +82,9 @@ class serialCTRL(threading.Thread):
                 data = [0xA5, 0xA5, 0x0A, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00]
                 _ser.write(bytes(data))
         elif ctrl['tease']:
-            data = [0xA5, 0xA5, 0x0A, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00]
+            import random
+            index = random.randint(0, 2)
+            data = KEYS[KEYS_LIST[index]]
             _ser.write(bytes(data))
             td_lock.acquire()
             g_ctrl = {'tease': 0, 'find': 0, 'free': 0}

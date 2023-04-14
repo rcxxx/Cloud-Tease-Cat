@@ -25,9 +25,9 @@ ser = serial.Serial(port='/dev/ttyUSB0',
                     baudrate=115200,
                     timeout=0.5)
 
-KEYS = {'小球': [0xA5, 0xA5, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
-        '激光笔': [0xA5, 0xA5, 0x05, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
-        '逗猫棒': [0xA5, 0xA5, 0x0A, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00]}
+KEYS = {'ball': [0xA5, 0xA5, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
+        'laser': [0xA5, 0xA5, 0x05, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
+        'stick': [0xA5, 0xA5, 0x0A, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00]}
 
 
 def connect_mqtt() -> mqtt:
@@ -54,15 +54,15 @@ def subscribe(client: mqtt):
         print("\033[0;;42m[Message]\033[0m: receive message ---------- payload is : " + payload)
         payload_dict = json.loads(payload)
         if 'stick' in payload_dict['params']:
-            data = KEYS['逗猫棒']
+            data = KEYS['stick']
             ser.write(bytes(data))
             print("\033[0;36m[Publisher]:  Use item: stick\033[0m")
         elif 'ball' in payload_dict['params']:
-            data = KEYS['小球']
+            data = KEYS['ball']
             ser.write(bytes(data))
             print("\033[0;36m[Publisher]:  Use item: ball\033[0m")
         elif 'laser' in payload_dict['params']:
-            data = KEYS['激光笔']
+            data = KEYS['laser']
             ser.write(bytes(data))
             print("\033[0;36m[Publisher]:  Use item: laser\033[0m")
 
