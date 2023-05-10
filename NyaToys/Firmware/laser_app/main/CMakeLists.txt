@@ -1,0 +1,12 @@
+idf_component_register(SRCS  "main.c"
+                        "WS2812.c"
+                        "util.c"
+                        "led_strip_encoder.c"
+                        "rgb_task.c"
+                        "laser_task.c"
+                        "RPCProtocol/RPCProtocol_ll_esp32now.c"
+                        "RPCProtocol/RPCProtocol_cfg.c"
+                        "RPCProtocol/RPCProtocol.c"
+                        "crc.c"
+                        "rpc_cmd_cb.c"
+                    INCLUDE_DIRS "." "RPCProtocol")
