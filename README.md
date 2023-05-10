@@ -11,6 +11,7 @@ name | version
  Camera  | Insta360 ONE RS
 
 ## 玩具改造
+- [逗猫玩具](./NyaToys/)
 
 ## 物联网小程序
 - [远程逗猫微信小程序](./IoT-mqtt-miniprogram/)
