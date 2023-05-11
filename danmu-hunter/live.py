@@ -5,19 +5,9 @@ import json
 import sys
 import yaml
 
-import colorama
-import os
-
 from aiowebsocket.converses import AioWebSocket
 
-import serial
-
-colorama.init()
 cfg = yaml.load(open(sys.path[0] + '/dm_cfg.yaml', 'r', encoding='utf-8').read(), Loader=yaml.FullLoader)
-
-ser = serial.Serial(port=cfg['serial_port'],
-                    baudrate=115200,
-                    timeout=0.5)
 
 KEYS = {'小球': [0xA5, 0xA5, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
         '激光笔': [0xA5, 0xA5, 0x05, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00],
@@ -28,19 +18,8 @@ status_counter = {'小球': 0,
                   '激光笔': 0,
                   '逗猫棒': 0}
 
-
 def statusWrite():
     global status_counter
-    max_p = max(zip(status_counter.values(), status_counter.keys()))
-    if max_p[0] > 0:
-        data = KEYS[max_p[1]]
-        ser.write(bytes(data))
-        print(colorama.Cursor.POS(0, 7) + "\033[0;;42m[Publisher]\033[0m:上次执行状态\n   Use item:", max_p[1].rjust(3))
-        print(colorama.Cursor.POS(0, 9) + "      ······")
-    else:
-        print(colorama.Cursor.POS(0, 7) + "\033[0;;41m[Publisher]\033[0m:上次执行状态\n   No item selected.")
-        print(colorama.Cursor.POS(0, 9) + "      ······")
-
     status_counter = {'小球': 0,
                       '激光笔': 0,
                       '逗猫棒': 0}
@@ -52,14 +31,7 @@ SER_WRITE_INTERVAL = cfg['serial_interval']
 async def intervalSend():
     global status_counter
     while True:
-        # await asyncio.sleep(SER_WRITE_INTERVAL)
-        n = SER_WRITE_INTERVAL
-        while n >= 0:
-            print(colorama.Cursor.POS(0, 2) + '\033[0;36m[Timer]\033[0m:距下次玩具启动: %02d:%02d'%((n % 3600) // 60, n % 60))
-            n -= 1
-            print(colorama.Cursor.POS(0, 4) + "\033[0;36m[Counter]\033[0m:当前累计状态\n{}".format(status_counter))
-            print(colorama.Cursor.POS(0, 9) + "      ······")
-            await asyncio.sleep(1)
+        await asyncio.sleep(SER_WRITE_INTERVAL)
         statusWrite()
 
 
@@ -129,11 +101,9 @@ def parseData(_data):
             if jd['cmd'] == 'DANMU_MSG':
                 msg = jd['info'][1]
                 user = jd['info'][2][1]
-                # print("[DANMU_MSG]:   User: {}  Msg: {}".format(user, msg))
                 if msg in KEYS.keys():
                     status_counter[msg] += 1
-                    # print("\033[0;36m[Counter]:   {} + 1\033[0m".format(msg))
-                    # print("\033[0;36m[Counter]\033[0m:   {}".format(status_counter))
+                    print("[DANMU_MSG]: User: {}  Msg: {}".format(user, msg), "\033[0;36m 累计 + 1\033[0m")
 
         except Exception as e:
             pass
